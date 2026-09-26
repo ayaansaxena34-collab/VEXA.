@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>VEXA — Describe it. Build it.</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 50% 20%, #17245c 0%, #080b24 35%, #03040d 75%);
+      color: white;
+      overflow-x: hidden;
+    }
+
+    /* Background glow */
+    .glow {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      background: #5b35ff;
+      filter: blur(180px);
+      opacity: 0.18;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    /* Navigation */
+    nav {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 7%;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(15px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: 4px;
+    }
+
+    .mini-logo {
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: 900;
+      color: white;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #28e7ff, #315cff, #d94dff);
+      box-shadow: 0 0 25px rgba(76, 100, 255, 0.5);
+    }
+
+    .nav-button {
+      padding: 10px 18px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      background: rgba(255,255,255,0.05);
+      color: white;
+      cursor: pointer;
+    }
+
+    .nav-button:hover {
+      background: rgba(255,255,255,0.1);
+    }
+
+    /* Hero */
+    main {
+      width: 90%;
+      max-width: 1100px;
+      margin: auto;
+      text-align: center;
+      padding: 90px 20px 70px;
+    }
+
+    .logo {
+      width: 105px;
+      height: 105px;
+      margin: 0 auto 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 70px;
+      font-weight: 900;
+      border-radius: 30px;
+      background: linear-gradient(135deg, #28e7ff, #315cff 50%, #d94dff);
+      box-shadow:
+        0 0 35px rgba(62, 101, 255, 0.45),
+        inset 0 0 30px rgba(255,255,255,0.15);
+      transform: rotate(-2deg);
+    }
+
+    h1 {
+      font-size: clamp(45px, 7vw, 82px);
+      line-height: 1;
+      letter-spacing: -4px;
+      margin-bottom: 20px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #37eaff, #6380ff, #dd5cff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      font-size: 20px;
+      color: #aeb5d1;
+      margin-bottom: 45px;
+    }
+
+    /* Builder box */
+    .builder {
+      max-width: 850px;
+      margin: auto;
+      padding: 8px;
+      border-radius: 22px;
+      background: linear-gradient(
+        135deg,
+        rgba(48,231,255,0.6),
+        rgba(83,83,255,0.3),
+        rgba(216,70,255,0.6)
+      );
+      box-shadow: 0 20px 70px rgba(0,0,0,0.4);
+    }
+
+    .builder-inner {
+      background: #090c1c;
+      border-radius: 16px;
+      padding: 25px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 170px;
+      resize: vertical;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: white;
+      font-size: 18px;
+      line-height: 1.6;
+      font-family: inherit;
+    }
+
+    textarea::placeholder {
+      color: #68708f;
+    }
+
+    .builder-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+      gap: 15px;
+    }
+
+    .hint {
+      color: #68708f;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .build-button {
+      border: none;
+      padding: 15px 28px;
+      border-radius: 12px;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      background: linear-gradient(90deg, #287dff, #8d45ff);
+      box-shadow: 0 8px 25px rgba(80, 75, 255, 0.3);
+      transition: 0.2s;
+    }
+
+    .build-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(80, 75, 255, 0.5);
+    }
+
+    /* Examples */
+    .examples {
+      margin-top: 30px;
+    }
+
+    .examples p {
+      color: #68708f;
+      margin-bottom: 13px;
+      font-size: 14px;
+    }
+
+    .example {
+      display: inline-block;
+      margin: 5px;
+      padding: 9px 14px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #cbd0e5;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .example:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(120,140,255,0.5);
+    }
+
+    /* Features */
+    .features {
+      max-width: 950px;
+      margin: 80px auto 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .feature {
+      padding: 25px;
+      text-align: left;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.035);
+    }
+
+    .feature-icon {
+      font-size: 25px;
+      margin-bottom: 15px;
+    }
+
+    .feature h3 {
+      margin-bottom: 8px;
+    }
+
+    .feature p {
+      color: #8e96b5;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    /* Building screen */
+    #building {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      background: #03040d;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .building-content {
+      width: 90%;
+      max-width: 650px;
+    }
+
+    .building-logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 30px;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #28e7ff, #315cff, #d94dff);
+      animation: pulse 1.5s infinite;
+    }
+
+    .progress {
+      margin-top: 30px;
+      height: 7px;
+      border-radius: 20px;
+      background: #171a2d;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: 20px;
+      background: linear-gradient(90deg, #28e7ff, #7d55ff, #dd5cff);
+      transition: width 0.5s;
+    }
+
+    #status {
+      margin-top: 20px;
+      color: #aeb5d1;
+    }
+
+    @keyframes pulse {
+      50% {
+        transform: scale(1.08);
+        box-shadow: 0 0 45px rgba(90,100,255,0.5);
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 700px) {
+      nav {
+        padding: 0 20px;
+      }
+
+      main {
+        padding-top: 60px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .builder-bottom {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .build-button {
+        width: 100%;
+      }
+
+      .hint {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="glow"></div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="brand">
+      <div class="mini-logo">V</div>
+      VEXA
+    </div>
+
+    <button class="nav-button" onclick="alert('VEXA V1')">
+      V1
+    </button>
+  </nav>
+
+  <!-- Main website -->
+  <main>
+
+    <div class="logo">V</div>
+
+    <h1>
+      Describe it.<br>
+      <span class="gradient-text">Build it.</span>
+    </h1>
+
+    <p class="subtitle">
+      Turn your idea into a working website with AI.
+    </p>
+
+    <!-- Builder -->
+    <div class="builder">
+      <div class="builder-inner">
+
+        <textarea
+          id="idea"
+          placeholder="What do you want to build?&#10;&#10;Example: Build me a modern website for a gaming club with events, a leaderboard and member profiles."
+        ></textarea>
+
+        <div class="builder-bottom">
+          <div class="hint">
+            VEXA will turn your idea into a project.
+          </div>
+
+          <button class="build-button" onclick="startBuilding()">
+            ✨ Build it
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Examples -->
+    <div class="examples">
+      <p>Try an idea</p>
+
+      <span class="example" onclick="useExample('Build me a portfolio website for a photographer with a gallery and contact page.')">
+        📸 Portfolio
+      </span>
+
+      <span class="example" onclick="useExample('Build me a modern website for a restaurant with a menu, gallery and booking page.')">
+        🍔 Restaurant
+      </span>
+
+      <span class="example" onclick="useExample('Build me a study planner where students can organize subjects, homework and exams.')">
+        📚 Study app
+      </span>
+
+      <span class="example" onclick="useExample('Build me a website for a gaming club with events and a leaderboard.')">
+        🎮 Gaming
+      </span>
+    </div>
+
+    <!-- Features -->
+    <section class="features">
+
+      <div class="feature">
+        <div class="feature-icon">💡</div>
+        <h3>Describe</h3>
+        <p>
+          Tell VEXA what you want to create using normal language.
+        </p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <h3>Build</h3>
+        <p>
+          VEXA turns your idea into a software project.
+        </p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-icon">🚀</div>
+        <h3>Preview</h3>
+        <p>
+          See the result and continue improving it with AI.
+        </p>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Building screen -->
+  <div id="building">
+
+    <div class="building-content">
+
+      <div class="building-logo">V</div>
+
+      <h2>VEXA is building...</h2>
+
+      <p id="status">
+        Understanding your idea...
+      </p>
+
+      <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    function useExample(text) {
+      document.getElementById("idea").value = text;
+      document.getElementById("idea").focus();
+    }
+
+
+    function startBuilding() {
+
+      const idea = document.getElementById("idea").value.trim();
+
+      if (!idea) {
+        alert("Tell VEXA what you want to build first!");
+        return;
+      }
+
+      document.getElementById("building").style.display = "flex";
+
+      const status = document.getElementById("status");
+      const progress = document.getElementById("progressBar");
+
+      const steps = [
+        ["Understanding your idea...", 20],
+        ["Planning the design...", 40],
+        ["Generating the website...", 65],
+        ["Testing the project...", 85],
+        ["Preparing your preview...", 100]
+      ];
+
+      let i = 0;
+
+      function nextStep() {
+
+        if (i >= steps.length) {
+
+          status.textContent = "Your project is ready! 🚀";
+
+          setTimeout(() => {
+            alert(
+              "VEXA V1 demo complete!\\n\\nNext, we will connect real AI so VEXA can actually generate your website."
+            );
+
+            document.getElementById("building").style.display = "none";
+
+          }, 1000);
+
+          return;
+        }
+
+        status.textContent = steps[i][0];
+        progress.style.width = steps[i][1] + "%";
+
+        i++;
+
+        setTimeout(nextStep, 1000);
+      }
+
+      nextStep();
+    }
+
+  </script>
+
+</body>
+</html>
